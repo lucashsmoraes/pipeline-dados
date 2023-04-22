@@ -7,7 +7,6 @@ terraform {
       source = "hashicorp/random"
     }
   }
-
   cloud {
     organization = "TCC-PIPLINE"
 

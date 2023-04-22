@@ -23,6 +23,9 @@ jobs:
         run: |
           pwd
           ls
+          cd terraform
+          cd ../app
+          ls
 
       - name: Terraform Fmt
         id: fmt

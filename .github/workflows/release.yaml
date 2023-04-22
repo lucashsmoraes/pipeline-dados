@@ -71,3 +71,10 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
         working-directory: ${{ env.working-directory }}
+
+      - name: destroy if error terraform apply
+        uses: dflook/terraform-destroy-workspace@v1
+        if: ${{ steps.first_try.outputs.failure-reason == 'apply-failed' }}
+        with:
+          path: ${{ env.working-directory }}
+          workspace: ${{ github.head_ref }}

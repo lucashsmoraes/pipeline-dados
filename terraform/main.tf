@@ -28,8 +28,8 @@
 resource "aws_s3_object" "glue_script" {
   depends_on = [aws_s3_bucket.buckets]
   bucket = "${var.prefix}-${var.bucket_names[3]}-${var.account_id}"
-  key    = "create_glue_job.py"
-  source = "./files/job/glue-etl.py"
+  key    = "glue-etl.py"
+  source = "../../job/glue-etl.py"
   force_destroy = true
 
   # Define as permissões de acesso ao objeto
@@ -42,7 +42,7 @@ resource "aws_s3_object" "jars" {
   depends_on = [aws_s3_object.glue_script]
   bucket = "${var.prefix}-${var.bucket_names[3]}-${var.account_id}"
   key    = "jars/delta-core_2.12-1.0.0.jar"
-  source = "./files/jars/delta-core_2.12-1.0.0.jar"
+  source = "../../app/jars/delta-core_2.12-1.0.0.jar"
   force_destroy = true
 
   # Define as permissões de acesso ao objeto

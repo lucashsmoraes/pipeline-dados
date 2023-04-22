@@ -10,13 +10,6 @@
 #        Principal = {
 #          Service = ["lambda.amazonaws.com", "glue.amazonaws.com", "ec2.amazonaws.com", "s3.amazonaws.com"]
 #        }
-#      },
-#      {
-#        Action    = "sts:AssumeRole"
-#        Effect    = "Allow"
-#        Principal = {
-#          "AWS" : "arn:aws:iam::469691162657:root"
-#        }
 #      }
 #    ]
 #  })

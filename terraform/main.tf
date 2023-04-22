@@ -72,6 +72,3 @@ resource "aws_iam_role_policy_attachment" "glue_job_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
   role       = aws_iam_role.glue_role.name
 }
-AWS_ACCESS_KEY_ID
-AWS_DEFAULT_REGION
-AWS_SECRET_ACCESS_KEY

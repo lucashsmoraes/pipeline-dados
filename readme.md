@@ -9,6 +9,9 @@
 * Experiência em github Actions
 * Experiência em AWS
 
+### O que é GITHUB_TOKEN
+* explicação: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+
 ### Como configurar Terraform com GitHub
 
 * configuração: https://developer.hashicorp.com/terraform/tutorials/automation/github-actions

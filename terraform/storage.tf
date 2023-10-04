@@ -6,6 +6,46 @@ resource "aws_s3_bucket" "buckets" {
   tags = local.common_tags
 }
 
+resource "aws_s3_object" "upload_files" {
+  bucket = aws_s3_bucket.buckets[3].id
+  key    = "app.zip"
+  source = "../../../app.zip"
+  content_type = "application/zip"
+
+  depends_on = [
+    aws_s3_bucket.buckets
+  ]
+}
+
+resource "zipfile" "zip" {
+  source_dir = "../../../app"
+  output_path = "../../../app.zip"
+}
+
+resource "aws_s3_object" "glue_script" {
+  depends_on = [aws_s3_bucket.buckets]
+  bucket = "${var.prefix}-${var.bucket_names[3]}-${var.account_id}"
+  key    = "jobs/glue-etl.py"
+  source = "./files/job/glue-etl.py"
+  force_destroy = true
+
+  # Define as permissões de acesso ao objeto
+  acl    = "private"
+  # Define o tipo de conteúdo do objeto
+  content_type = "text/x-python"
+}
+
+resource "aws_s3_object" "jars" {
+  depends_on = [aws_s3_object.glue_script]
+  bucket = "${var.prefix}-${var.bucket_names[3]}-${var.account_id}"
+  key    = "jars/delta-core_2.12-1.0.0.jar"
+  source = "./files/jars/delta-core_2.12-1.0.0.jar"
+  force_destroy = true
+
+  # Define as permissões de acesso ao objeto
+  acl    = "private"
+}
+
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_sse" {
   count  = length(var.bucket_names)
   bucket = "${var.prefix}-${var.bucket_names[count.index]}-${var.account_id}"

@@ -6,10 +6,6 @@ name: "GitHub Actions Example"
     branches:
       - develop
       - main
-  push:
-    branches:
-      - develop
-      - main
 
 permissions:
   contents: read

@@ -1,0 +1,40 @@
+---
+name: "Pull Request to develop"
+
+"on":
+  push:
+    branches:
+      - feature/*
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: terraform
+      TF_WORKSPACE: WORKSPACE
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3.10.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: develop
+
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Run Terraform
+        run: |
+          pwd
+          ls
+          cd terraform
+          cd ../app
+          ls

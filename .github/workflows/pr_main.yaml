@@ -1,10 +1,10 @@
 ---
-name: "Provisionando infraestrutura"
+name: "Pull Request to main"
 
 "on":
   push:
     branches:
-      - feature/*
+      - develop
 
 permissions:
   contents: read
@@ -21,11 +21,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Create Pull Request
+      - name: Create Pull Request to main
         uses: peter-evans/create-pull-request@v3.10.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          base: develop
+          base: main
 
       - uses: hashicorp/setup-terraform@v2
         with:

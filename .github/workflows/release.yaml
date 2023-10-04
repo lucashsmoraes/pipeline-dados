@@ -1,11 +1,13 @@
 ---
-name: "GitHub Actions Example"
+name: "Provisionando infraestrutura"
 
 "on":
   pull_request:
     branches:
       - develop
-      - main
+    push:
+        branches:
+            - main
 
 permissions:
   contents: read

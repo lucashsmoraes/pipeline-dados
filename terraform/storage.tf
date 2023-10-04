@@ -6,16 +6,6 @@ resource "aws_s3_bucket" "buckets" {
   tags = local.common_tags
 }
 
-resource "aws_s3_object" "upload_files" {
-  bucket = aws_s3_bucket.buckets[3].id
-  key    = "glue_etl2.py"
-  source = "../../../app/glue_etl.py"
-
-  depends_on = [
-    aws_s3_bucket.buckets
-  ]
-}
-
 resource "aws_s3_object" "glue_script" {
   depends_on = [aws_s3_bucket.buckets]
   bucket = "${var.prefix}-${var.bucket_names[3]}-${var.account_id}"

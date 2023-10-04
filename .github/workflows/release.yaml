@@ -25,7 +25,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3.10.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: feature/${{ github.event.pull_request.number }}
+          branch: feature/*
           base: develop
 
       - uses: hashicorp/setup-terraform@v2

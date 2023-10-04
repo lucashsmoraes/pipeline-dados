@@ -22,6 +22,13 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Create Pull Request
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: develop
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: hashicorp/setup-terraform@v2
         with:

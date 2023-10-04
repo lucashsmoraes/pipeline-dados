@@ -8,18 +8,12 @@ resource "aws_s3_bucket" "buckets" {
 
 resource "aws_s3_object" "upload_files" {
   bucket = aws_s3_bucket.buckets[3].id
-  key    = "app.zip"
-  source = "../../../app.zip"
-  content_type = "application/zip"
+  key    = "glue_etl2.py"
+  source = "../../../app/glue_etl.py"
 
   depends_on = [
     aws_s3_bucket.buckets
   ]
-}
-
-resource "zipfile" "zip" {
-  source_dir = "../../../app"
-  output_path = "../../../app.zip"
 }
 
 resource "aws_s3_object" "glue_script" {

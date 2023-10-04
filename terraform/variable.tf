@@ -27,7 +27,8 @@ variable "bucket_names" {
   default = [
     "bronze",
     "silver",
-    "gold"
+    "gold",
+    "scripts"
   ]
 }
 

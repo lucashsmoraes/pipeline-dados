@@ -24,10 +24,8 @@ jobs:
       - name: Create Pull Request to main
         uses: repo-sync/pull-request@v2
         with:
-          destinationBranch: main
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_label: "feature, automated pr"
-          pr_title: "PULL REQUEST TO MAIN"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          destination_branch: main
 
       - uses: hashicorp/setup-terraform@v2
         with:

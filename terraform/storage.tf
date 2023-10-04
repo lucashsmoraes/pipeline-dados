@@ -13,8 +13,6 @@ resource "aws_s3_object" "glue_script" {
   source = "./files/job/glue-etl.py"
   force_destroy = true
 
-  # Define as permissões de acesso ao objeto
-  acl    = "private"
   # Define o tipo de conteúdo do objeto
   content_type = "text/x-python"
 }
@@ -25,14 +23,12 @@ resource "aws_s3_object" "jars" {
   key    = "jars/delta-core_2.12-1.0.0.jar"
   source = "./files/jars/delta-core_2.12-1.0.0.jar"
   force_destroy = true
-
-  # Define as permissões de acesso ao objeto
-  acl    = "private"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_sse" {
   count  = length(var.bucket_names)
   bucket = "${var.prefix}-${var.bucket_names[count.index]}-${var.account_id}"
+
 
   rule {
     apply_server_side_encryption_by_default {

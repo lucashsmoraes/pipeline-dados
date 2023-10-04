@@ -72,14 +72,14 @@ jobs:
               body: output
             })
 
-      - name: Terraform apply
-        id: apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve
-        working-directory: ${{ env.working-directory }}
-
-#      - name: Terraform destroy
-#        if: failure()
-#        run: |
-#          terraform destroy -auto-approve
+#      - name: Terraform apply
+#        id: apply
+#        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#        run: terraform apply -auto-approve
 #        working-directory: ${{ env.working-directory }}
+
+      - name: Terraform destroy
+#        if: failure()
+        run: |
+          terraform destroy -auto-approve
+        working-directory: ${{ env.working-directory }}

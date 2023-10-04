@@ -61,6 +61,13 @@ jobs:
         run: terraform plan -no-color
         working-directory: ${{ env.working-directory }}
 
+      - name: Pull Request to main
+        uses: repo-sync/pull-request@v2
+        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+        with:
+          destination_branch: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Plan output
         id: output
         uses: actions/github-script@v3

@@ -5,9 +5,6 @@ name: "Provisionando infraestrutura"
   pull_request:
     branches:
       - feature/*
-    push:
-      branches:
-        - main
 
 permissions:
   contents: read
@@ -25,10 +22,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Create Pull Request
-        uses: repo-sync/pull-request@v2
+        uses: peter-evans/create-pull-request@v3.10.1
         with:
-          destination_branch: develop
           token: ${{ secrets.GITHUB_TOKEN }}
+          branch: feature/${{ github.event.pull_request.number }}
+          base: develop
 
       - uses: hashicorp/setup-terraform@v2
         with:
@@ -62,11 +60,11 @@ jobs:
         working-directory: ${{ env.working-directory }}
 
       - name: Pull Request to main
-        uses: repo-sync/pull-request@v2
-        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+        uses: peter-evans/create-pull-request@v3.10.1
         with:
-          destination_branch: main
           token: ${{ secrets.GITHUB_TOKEN }}
+          branch: develop
+          base: main
 
       - name: Plan output
         id: output

@@ -1,11 +1,10 @@
 ---
-name: "GitHub Actions Example"
+name: "Pull Request to main"
 
 "on":
-  pull_request:
+  push:
     branches:
       - develop
-      - main
 
 permissions:
   contents: read
@@ -20,6 +19,13 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Create Pull Request to main
+        uses: repo-sync/pull-request@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          destination_branch: main
 
       - uses: hashicorp/setup-terraform@v2
         with:
@@ -51,6 +57,12 @@ jobs:
         id: plan
         run: terraform plan -no-color
         working-directory: ${{ env.working-directory }}
+
+      - name: Pull Request to main
+        uses: peter-evans/create-pull-request@v3.10.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
 
       - name: Plan output
         id: output

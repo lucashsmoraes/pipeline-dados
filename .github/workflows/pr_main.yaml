@@ -22,10 +22,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: Create Pull Request to main
-        uses: peter-evans/create-pull-request@v3.10.1
+        uses: repo-sync/pull-request@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
+          destinationBranch: main
 
       - uses: hashicorp/setup-terraform@v2
         with:

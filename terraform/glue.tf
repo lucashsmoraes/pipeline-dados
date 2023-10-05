@@ -8,14 +8,11 @@ resource "aws_glue_job" "glue_job" {
   timeout           = 5
 
   command {
-    script_location = "s3://${local.glue_bucket}/jobs/glue-etl.py"
+    script_location = "s3://${local.glue_bucket}/jobs/main.py"
     python_version  = "3"
   }
 
   default_arguments = {
     "--additional-python-modules" = "delta-spark==1.0.0"
-    "--extra-jars" = "s3://tcc-scripts-469691162657/jars/delta-core_2.12-1.0.0.jar"
-    "--conf spark.delta.logStore.class" = "org.apache.spark.sql.delta.storage.S3SingleDriverLogStore"
-    "--conf spark.sql.extensions" = "io.delta.sql.DeltaSparkSessionExtension"
   }
 }

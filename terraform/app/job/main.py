@@ -1,14 +1,24 @@
-from pyspark.sql.functions import *
-from pyspark.sql.types import StructField, StructType, StringType, DoubleType, IntegerType
-from pyspark.sql import SparkSession
-import os
+import sys
+from pyspark.sql.functions import substring, col
 from datetime import datetime
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
+import logging
 
-PATH_ORIGEM = "C:\\Users\\Pichau\\PycharmProjects\\tcc-pipeline\\app\\job\\COTAHIST_A2022.TXT"
 def create_session() -> SparkSession:
-    return SparkSession.builder.appName("JOB").getOrCreate()
+    logging.info("Criando sessão spark")
+    return SparkSession.builder.appName("JOB_BRONZE").getOrCreate()
+
+def return_path():
+    logging.info("Retornando path do arquivo")
+    if len(sys.argv) > 1:
+        return sys.argv[1]
+    else:
+        return "s3://tcc-bronze-469691162657/COTAHIST_A2022/COTAHIST_A2022.TXT"
+
 
 def return_schema() -> StructType:
+    logging.info("Retornando schema do arquivo")
     return StructType([
         StructField("TIPREG", StringType(), True),
         StructField("DATPRG", StringType(), True),
@@ -39,6 +49,7 @@ def return_schema() -> StructType:
     ])
 
 def return_columns_names() -> list:
+    logging.info("Retornando nome das colunas")
     return [
         "tipo_de_registro",
         "data_pregao",
@@ -70,11 +81,15 @@ def return_columns_names() -> list:
 
 
 def load_file(spark) -> DataFrame:
-    df = spark.read.text(PATH_ORIGEM)
-    print(df.show(3))
+    logging.info("Lendo arquivo de dados")
+    df = spark.read.text(return_path())
+    logging.info("Arquivo de dados lido com sucesso")
     return df
-def create_dataframe(spark, data) -> DataFrame:
-    return data.select(
+
+
+def create_dataframe(data) -> DataFrame:
+    logging.info("Criando dataframe")
+    df = data.select(
         substring("value", 1, 2).alias("TIPREG"),
         substring("value", 3, 8).alias("DATPRG"),
         substring("value", 11, 2).alias("CODBDI"),
@@ -102,10 +117,10 @@ def create_dataframe(spark, data) -> DataFrame:
         substring("value", 231, 12).alias("CODISI"),
         substring("value", 243, 3).alias("DISMES")
     )
+    logging.info("DataFrame criado com sucesso")
+    return df
 
-
-
-def list_not_string(df, schema):
+def list_not_string(schema):
     list = []
     for field in schema:
         if field.dataType != StringType():
@@ -113,11 +128,13 @@ def list_not_string(df, schema):
     return list
 
 def verify_type_to_cast(df, schema):
+    logging.info("Convertendo tipo de dado para cast")
     for field in schema:
         if field.dataType != StringType():
             df = df.withColumn(field.name, col(field.name).cast(field.dataType))
-    return df.toDF(*return_columns_names())
-
+    df = df.toDF(*return_columns_names())
+    logging.info("Tipos de dados convertidos com sucesso")
+    return df
 
 def print_list(list):
     for item in list:
@@ -128,13 +145,12 @@ def main():
     time = datetime.now()
     print("inicio", time)
     spark = create_session()
+    spark.sparkContext.setLogLevel("INFO")
     data = load_file(spark)
-    df = create_dataframe(spark, data)
+    df = create_dataframe(data)
     df.printSchema(1)
-
     schema = return_schema()
-
-    list = list_not_string(df, schema)
+    list = list_not_string(schema)
     print_list(list)
 
     df = verify_type_to_cast(df, schema)
@@ -146,3 +162,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

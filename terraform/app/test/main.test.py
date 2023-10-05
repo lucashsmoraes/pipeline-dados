@@ -1,7 +1,6 @@
 from pyspark.sql.functions import *
 from pyspark.sql.types import StructField, StructType, StringType, DoubleType, IntegerType
 from pyspark.sql import SparkSession
-import os
 from datetime import datetime
 
 PATH_ORIGEM = "C:\\Users\\Pichau\\PycharmProjects\\tcc-pipeline\\app\\job\\COTAHIST_A2022.TXT"

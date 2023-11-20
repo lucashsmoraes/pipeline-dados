@@ -5,16 +5,13 @@ from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
 import logging
 
+
 def create_session() -> SparkSession:
     logging.info("Criando sessão spark")
     return SparkSession.builder.appName("JOB_BRONZE").getOrCreate()
 
-def return_path():
-    logging.info("Retornando path do arquivo")
-    if len(sys.argv) > 1:
-        return sys.argv[1]
-    else:
-        return "s3://tcc-bronze-469691162657/COTAHIST_A2022/COTAHIST_A2022.TXT"
+
+PATH = "s3://tcc-bronze-469691162657/COTAHIST_A2022/COTAHIST_A2022.TXT"
 
 
 def return_schema() -> StructType:
@@ -48,6 +45,7 @@ def return_schema() -> StructType:
         StructField("DISMES", IntegerType(), True)
     ])
 
+
 def return_columns_names() -> list:
     logging.info("Retornando nome das colunas")
     return [
@@ -80,9 +78,9 @@ def return_columns_names() -> list:
     ]
 
 
-def load_file(spark) -> DataFrame:
+def load_file(spark, path) -> DataFrame:
     logging.info("Lendo arquivo de dados")
-    df = spark.read.text(return_path())
+    df = spark.read.text(path)
     logging.info("Arquivo de dados lido com sucesso")
     return df
 
@@ -120,12 +118,14 @@ def create_dataframe(data) -> DataFrame:
     logging.info("DataFrame criado com sucesso")
     return df
 
+
 def list_not_string(schema):
     list = []
     for field in schema:
         if field.dataType != StringType():
             list.append(field.name)
     return list
+
 
 def verify_type_to_cast(df, schema):
     logging.info("Convertendo tipo de dado para cast")
@@ -135,6 +135,7 @@ def verify_type_to_cast(df, schema):
     df = df.toDF(*return_columns_names())
     logging.info("Tipos de dados convertidos com sucesso")
     return df
+
 
 def print_list(list):
     for item in list:
@@ -146,7 +147,7 @@ def main():
     print("inicio", time)
     spark = create_session()
     spark.sparkContext.setLogLevel("INFO")
-    data = load_file(spark)
+    data = load_file(spark, PATH)
     df = create_dataframe(data)
     df.printSchema(1)
     schema = return_schema()
@@ -162,4 +163,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

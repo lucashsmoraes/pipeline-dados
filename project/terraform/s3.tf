@@ -1,12 +1,12 @@
 resource "aws_s3_bucket" "this" {
-  for_each      = tolist(local.buckets_name)
+  for_each      = {for i, b in local.buckets_name : i => b}
   bucket        = each.value
   force_destroy = true
   tags          = local.common_tags
 }
 
 resource "aws_s3_object" "upload" {
-  bucket        =  local.teste[0]
+  bucket        =  tolist(local.buckets_name)[0]
   key           = "app/"
   source        = "../app"
   force_destroy = true

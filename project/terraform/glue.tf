@@ -7,7 +7,6 @@ resource "aws_glue_job" "glue_job" {
   timeout           = 5
 
   command {
-    for_each      = {for i, b in local.buckets_name: i => b}
     script_location = "s3://${local.prefix}-${local.names[0]}-${local.account_id}/app/job_bronze/main.py"
     python_version  = "3"
   }

@@ -8,8 +8,7 @@ resource "aws_s3_bucket" "this" {
 resource "aws_s3_bucket_object" "upload" {
   for_each      = {for i, b in local.buckets_name: i => b}
   bucket        = each.value[0]
-  key           = "app/"
-  source        = "./app"
+  source        = "../app"
   force_destroy = true
   content_type  = "application/x-directory"
 }
@@ -60,8 +59,8 @@ data "aws_iam_policy_document" "bucket_policy" {
     actions   = ["s3:*"]
     effect    = "Deny"
     resources = [
-      concat("arn:aws:s3:::${local.prefix}/"),
-      concat("arn:aws:s3:::${local.prefix}/*")
+      "arn:aws:s3:::${local.prefix}/",
+      "arn:aws:s3:::${local.prefix}/*"
     ]
     condition {
       test     = "Bool"
@@ -86,8 +85,8 @@ data "aws_iam_policy_document" "bucket_policy" {
     ]
     effect    = "Allow"
     resources = [
-      concat("arn:aws:s3:::${local.prefix}*/"),
-      concat("arn:aws:s3:::${local.prefix}*/*")
+      "arn:aws:s3:::${local.prefix}*/",
+      "arn:aws:s3:::${local.prefix}*/*"
     ]
     principals {
       type        = "AWS"

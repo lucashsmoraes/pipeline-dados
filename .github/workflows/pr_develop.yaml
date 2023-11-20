@@ -14,7 +14,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     env:
-      working-directory: project
+      working-directory: project/terraform
       TF_WORKSPACE: WORKSPACE
     steps:
       - name: Check out code
@@ -27,6 +27,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           destination_branch: develop
 
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
       - name: Terraform Fmt
         id: fmt
         run: terraform fmt -check
@@ -35,7 +39,7 @@ jobs:
       - name: Terraform init
         id: init
         run: terraform init
-        working-directory: ${{ env.working-directory }}/terraform
+        working-directory: ${{ env.working-directory }}
 
       - name: Terraform validate
         id: validate
@@ -44,4 +48,4 @@ jobs:
       - name: Terraform plan
         id: plan
         run: terraform plan -no-color
-        working-directory: ${{ env.working-directory }}/terraform
+        working-directory: ${{ env.working-directory }}

@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "this" {
 }
 
 resource "aws_s3_object" "upload" {
-  bucket        =  local.teste["script"]
+  bucket        =  local.teste[0]
   key           = "app/"
   source        = "../app"
   force_destroy = true

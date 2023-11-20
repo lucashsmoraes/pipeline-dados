@@ -6,8 +6,7 @@ resource "aws_s3_bucket" "this" {
 }
 
 resource "aws_s3_object" "upload" {
-  for_each      = {for i, b in local.buckets_name : i => b}
-  bucket        = each.value[0]
+  bucket        =  local.teste[0]
   key           = "app/"
   source        = "../app"
   force_destroy = true

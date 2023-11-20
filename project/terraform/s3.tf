@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "this" {
   tags          = local.common_tags
 }
 
-resource "aws_s3_bucket_object" "upload" {
+resource "aws_s3_object" "upload" {
   for_each      = {for i, b in local.buckets_name: i => b}
   bucket        = each.value[0]
   key = "app/"

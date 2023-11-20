@@ -6,6 +6,6 @@ locals {
   common_tags                     = { Project = "pipeline-dados" }
   names                           = ["script", "bronze", "silver", "gold"]
   buckets_name                    = [for i in local.names: format("bucket-%s-%s-%s", local.prefix, i, local.account_id)]
-  teste = values(local.buckets_name)
+  teste = Keys(local.buckets_name)
 }
 

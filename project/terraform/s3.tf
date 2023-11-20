@@ -8,6 +8,7 @@ resource "aws_s3_bucket" "this" {
 resource "aws_s3_bucket_object" "upload" {
   for_each      = {for i, b in local.buckets_name: i => b}
   bucket        = each.value[0]
+  key = "app/"
   source        = "../app"
   force_destroy = true
   content_type  = "application/x-directory"
@@ -53,7 +54,6 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
 }
 
 data "aws_iam_policy_document" "bucket_policy" {
-  for_each = {for i, b in local.buckets_name: i => b}
   statement {
     sid       = "AllowSSLRequestsOnly"
     actions   = ["s3:*"]

@@ -13,21 +13,6 @@
 #  type        = string
 #}
 
-variable "glue_job_role_arn" {
-  description = "The ARN of the IAM role associated with this job."
-  type        = string
-}
-
-variable "script_location" {
-  description = "The S3 path to a script that executes a job."
-  type        = string
-}
-
-variable "kms_key_description" {
-  description = "The description of the key as viewed in AWS console."
-  type        = string
-}
-
 variable "kms_key_deletion_window_in_days" {
   description = "Duration in days after which the key is deleted after destruction of the resource, must be between 7 and 30 days."
   type        = number

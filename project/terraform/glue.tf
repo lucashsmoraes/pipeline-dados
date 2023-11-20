@@ -1,5 +1,4 @@
 resource "aws_glue_job" "glue_job" {
-  for_each      = {for i, b in local.buckets_name: i => b}
   name              = "Job_bronze"
   role_arn          = aws_iam_role.glue_role.arn
   glue_version      = "3.0"
@@ -9,7 +8,7 @@ resource "aws_glue_job" "glue_job" {
 
   command {
     for_each      = {for i, b in local.buckets_name: i => b}
-    script_location = concat("s3://", each.value[0], "/app/job_bronze/main.py")
+    script_location = "s3://${local.prefix}-${local.names[0]}-${local.account_id}/app/job_bronze/main.py"
     python_version  = "3"
   }
 

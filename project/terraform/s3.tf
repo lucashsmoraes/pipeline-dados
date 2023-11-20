@@ -60,8 +60,8 @@ data "aws_iam_policy_document" "bucket_policy" {
     actions   = ["s3:*"]
     effect    = "Deny"
     resources = [
-      concat("arn:aws:s3:::", each.value, "/"),
-      concat("arn:aws:s3:::", each.value, "/*")
+      concat("arn:aws:s3:::${local.prefix}/"),
+      concat("arn:aws:s3:::${local.prefix}/*")
     ]
     condition {
       test     = "Bool"
@@ -86,8 +86,8 @@ data "aws_iam_policy_document" "bucket_policy" {
     ]
     effect    = "Allow"
     resources = [
-      concat("arn:aws:s3:::", each.value, "/"),
-      concat("arn:aws:s3:::", each.value, "/*")
+      concat("arn:aws:s3:::${local.prefix}*/"),
+      concat("arn:aws:s3:::${local.prefix}*/*")
     ]
     principals {
       type        = "AWS"

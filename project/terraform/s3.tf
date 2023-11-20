@@ -6,7 +6,8 @@ resource "aws_s3_bucket" "this" {
 }
 
 resource "aws_s3_bucket_object" "upload" {
-  bucket        = local.buckets_name["script"]
+  for_each      = {for i, b in local.buckets_name: i => b}
+  bucket        = each.value[0]
   key           = "app/"
   source        = "./app"
   force_destroy = true
@@ -26,7 +27,7 @@ resource "aws_s3_bucket_acl" "bucket_acl" {
 
 # Rules for public access block
 resource "aws_s3_bucket_public_access_block" "public_access_block" {
-  for_each                = local.buckets_name
+  for_each                = {for i, b in local.buckets_name: i => b}
   bucket                  = each.value
   block_public_acls       = true
   block_public_policy     = true

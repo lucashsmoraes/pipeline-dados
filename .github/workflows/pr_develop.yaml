@@ -26,3 +26,22 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           destination_branch: develop
+
+      - name: Terraform Fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform init
+        id: init
+        run: terraform init
+        working-directory: ${{ env.working-directory }}/terraform
+
+      - name: Terraform validate
+        id: validate
+        run: terraform validate
+
+      - name: Terraform plan
+        id: plan
+        run: terraform plan -no-color
+        working-directory: ${{ env.working-directory }}/terraform

@@ -173,3 +173,8 @@ terraform.rc
 .terraform.lock.hcl
 /project/.terraform/
 /.vscode/
+/project/.vscode/
+/project/.idea/
+/project/.idea/*
+/project/app/.idea/
+/project/app/.idea/*

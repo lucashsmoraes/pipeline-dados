@@ -1,26 +1,26 @@
 variable "region" {
   description = "aws region"
+  type        = string
 }
 
 variable "account_id" {
   description = "aws account id"
+
 }
 
 variable "prefix" {
   description = "objects prefix"
-}
-
-variable "bucket_names" {
-  description = "s3 bucket names"
-  type        = set(string)
+  type        = string
 }
 
 variable "glue_job_role_arn" {
   description = "The ARN of the IAM role associated with this job."
+  type        = string
 }
 
 variable "script_location" {
   description = "The S3 path to a script that executes a job."
+  type        = string
 }
 
 variable "kms_key_alias" {
@@ -46,5 +46,4 @@ variable "kms_key_enable_key_rotation" {
 
 variable "buckets_names" {
   description = "s3 buckets names"
-  type        = set(string)
 }

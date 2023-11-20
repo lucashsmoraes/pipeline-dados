@@ -11,7 +11,7 @@ def lambda_handler(event, context):
         Role= role_glue,
         Command={
             'Name': 'glueetl',
-            'ScriptLocation': 's3://tcc-script/job/glue-etl.py'
+            'ScriptLocation': 's3://tcc-script/job1/glue-etl.py'
         },
         DefaultArguments={
             '--job-bookmark-option': 'job-bookmark-enable',

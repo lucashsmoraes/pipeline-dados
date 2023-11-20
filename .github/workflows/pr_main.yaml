@@ -14,7 +14,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     env:
-      working-directory: terraform
+      working-directory: project
       TF_WORKSPACE: WORKSPACE
     steps:
       - name: Check out code

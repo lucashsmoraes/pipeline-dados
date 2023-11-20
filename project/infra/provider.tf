@@ -8,7 +8,7 @@ terraform {
     }
   }
   cloud {
-    organization = "TCC-PIPLINE"
+    organization = "PIPLINE-DADOS"
 
     workspaces {
       name = "WORKSPACE"

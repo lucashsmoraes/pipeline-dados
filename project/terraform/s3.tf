@@ -1,32 +1,39 @@
 resource "aws_s3_bucket" "this" {
-  for_each      = local.buckets_name
+  for_each      = {for i, b in local.buckets_name : i => b}
   bucket        = each.value
   force_destroy = true
   tags          = local.common_tags
 }
 
-resource "aws_s3_bucket_object" "upload" {
-  bucket        = local.buckets_name["script"]
+resource "aws_s3_object" "upload" {
+  bucket        =  tolist(local.buckets_name)[0]
   key           = "app/"
-  source        = "./app"
+  source        = "../app"
   force_destroy = true
   content_type  = "application/x-directory"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_sse" {
-  for_each = local.buckets_name
+  for_each = {for i, b in local.buckets_name : i => b}
   bucket   = each.value
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "aws:kms"
+      kms_master_key_id = aws_kms_key.this.arn
+    }
+  }
 }
 
 resource "aws_s3_bucket_acl" "bucket_acl" {
-  for_each = local.buckets_name
+  for_each = {for i, b in local.buckets_name : i => b}
   bucket   = each.value
   acl      = "private"
 }
 
 # Rules for public access block
 resource "aws_s3_bucket_public_access_block" "public_access_block" {
-  for_each                = local.buckets_name
+  for_each                = {for i, b in local.buckets_name : i => b}
   bucket                  = each.value
   block_public_acls       = true
   block_public_policy     = true
@@ -47,20 +54,19 @@ resource "aws_kms_alias" "this" {
 }
 
 resource "aws_s3_bucket_policy" "bucket_policy" {
-  for_each = local.buckets_name
+  for_each = {for i, b in local.buckets_name : i => b}
   bucket   = each.value
   policy   = data.aws_iam_policy_document.bucket_policy.json
 }
 
 data "aws_iam_policy_document" "bucket_policy" {
-  for_each = local.buckets_name
   statement {
     sid       = "AllowSSLRequestsOnly"
     actions   = ["s3:*"]
     effect    = "Deny"
     resources = [
-      concat("arn:aws:s3:::", each.value, "/"),
-      concat("arn:aws:s3:::", each.value, "/*")
+      "arn:aws:s3:::${local.prefix}*/",
+      "arn:aws:s3:::${local.prefix}*/*"
     ]
     condition {
       test     = "Bool"
@@ -85,8 +91,8 @@ data "aws_iam_policy_document" "bucket_policy" {
     ]
     effect    = "Allow"
     resources = [
-      concat("arn:aws:s3:::", each.value, "/"),
-      concat("arn:aws:s3:::", each.value, "/*")
+      "arn:aws:s3:::${local.prefix}*/",
+      "arn:aws:s3:::${local.prefix}*/*"
     ]
     principals {
       type        = "AWS"

@@ -1,5 +1,5 @@
 resource "aws_glue_job" "glue_job" {
-  name              = concat("Job_bronze")
+  name              = "Job_bronze"
   role_arn          = aws_iam_role.glue_role.arn
   glue_version      = "3.0"
   worker_type       = "Standard"
@@ -7,7 +7,7 @@ resource "aws_glue_job" "glue_job" {
   timeout           = 5
 
   command {
-    script_location = concat("s3://", local.buckets_name["script"], "/app/job_bronze/main.py")
+    script_location = "s3://${local.prefix}-${local.names[0]}-${local.account_id}/app/job_bronze/main.py"
     python_version  = "3"
   }
 

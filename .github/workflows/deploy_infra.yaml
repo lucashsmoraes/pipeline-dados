@@ -14,7 +14,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     env:
-      working-directory: project
+      working-directory: project/terraform
       TF_WORKSPACE: WORKSPACE
     steps:
       - name: Check out code
@@ -32,7 +32,7 @@ jobs:
       - name: Terraform init
         id: init
         run: terraform init
-        working-directory: ${{ env.working-directory }}/terraform
+        working-directory: ${{ env.working-directory }}
 
       - name: Terraform validate
         id: validate
@@ -41,7 +41,7 @@ jobs:
       - name: Terraform plan
         id: plan
         run: terraform plan -no-color
-        working-directory: ${{ env.working-directory }}/terraform
+        working-directory: ${{ env.working-directory }}
 
       - name: Plan output
         id: output
@@ -76,4 +76,4 @@ jobs:
         id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
-        working-directory: ${{ env.working-directory }}/terraform
+        working-directory: ${{ env.working-directory }}

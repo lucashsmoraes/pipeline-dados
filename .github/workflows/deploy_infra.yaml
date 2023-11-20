@@ -32,7 +32,7 @@ jobs:
       - name: Terraform init
         id: init
         run: terraform init
-        working-directory: ${{ env.working-directory }}
+        working-directory: ${{ env.working-directory }}/terraform
 
       - name: Terraform validate
         id: validate
@@ -41,7 +41,7 @@ jobs:
       - name: Terraform plan
         id: plan
         run: terraform plan -no-color
-        working-directory: ${{ env.working-directory }}
+        working-directory: ${{ env.working-directory }}/terraform
 
       - name: Plan output
         id: output
@@ -82,4 +82,4 @@ jobs:
 #        if: failure()
         run: |
           terraform destroy -auto-approve
-        working-directory: ${{ env.working-directory }}
+        working-directory: ${{ env.working-directory }}/terraform

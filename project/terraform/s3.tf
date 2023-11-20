@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "this" {
-  for_each      = local.buckets_name
+  for_each      = {for i, b in local.buckets_name: i => b}
   bucket        = each.value
   force_destroy = true
   tags          = local.common_tags

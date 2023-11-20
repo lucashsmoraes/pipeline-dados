@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "this" {
-  for_each      = {for i, b in local.buckets_name : i => b}
+  for_each      = tolist(local.buckets_name)
   bucket        = each.value
   force_destroy = true
   tags          = local.common_tags
@@ -65,8 +65,8 @@ data "aws_iam_policy_document" "bucket_policy" {
     actions   = ["s3:*"]
     effect    = "Deny"
     resources = [
-      "arn:aws:s3:::${local.prefix}/",
-      "arn:aws:s3:::${local.prefix}/*"
+      "arn:aws:s3:::${local.prefix}*/",
+      "arn:aws:s3:::${local.prefix}*/*"
     ]
     condition {
       test     = "Bool"

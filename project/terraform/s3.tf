@@ -14,12 +14,12 @@ resource "aws_s3_bucket_object" "upload" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_sse" {
-  for_each = local.buckets_name
+  for_each = {for i, b in local.buckets_name: i => b}
   bucket   = each.value
 }
 
 resource "aws_s3_bucket_acl" "bucket_acl" {
-  for_each = local.buckets_name
+  for_each = {for i, b in local.buckets_name: i => b}
   bucket   = each.value
   acl      = "private"
 }
@@ -47,13 +47,13 @@ resource "aws_kms_alias" "this" {
 }
 
 resource "aws_s3_bucket_policy" "bucket_policy" {
-  for_each = local.buckets_name
+  for_each = {for i, b in local.buckets_name: i => b}
   bucket   = each.value
   policy   = data.aws_iam_policy_document.bucket_policy.json
 }
 
 data "aws_iam_policy_document" "bucket_policy" {
-  for_each = local.buckets_name
+  for_each = {for i, b in local.buckets_name: i => b}
   statement {
     sid       = "AllowSSLRequestsOnly"
     actions   = ["s3:*"]

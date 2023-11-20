@@ -1,5 +1,5 @@
 resource "aws_glue_job" "glue_job" {
-  name              = concat("Job_bronze")
+  name              = "Job_bronze"
   role_arn          = aws_iam_role.glue_role.arn
   glue_version      = "3.0"
   worker_type       = "Standard"
